@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: rizeos-backend
+    runtime: docker
+    plan: free
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_SSL
+        value: "true"
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: POLYGON_RPC_URL
+        sync: false
+      - key: POLYGON_CHAIN_ID
+        value: "80002"
+      - key: CONTRACT_ADDRESS
+        sync: false
+      - key: ADMIN_PRIVATE_KEY
+        sync: false
