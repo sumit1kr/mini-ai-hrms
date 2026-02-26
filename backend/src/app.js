@@ -19,7 +19,41 @@ const aiRoutes = require('./routes/ai');
 const web3Routes = require('./routes/web3');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3001;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isTransientDbError = (err) => {
+  if (!err) return false;
+  const message = String(err.message || '').toLowerCase();
+  return (
+    message.includes('connection terminated unexpectedly') ||
+    message.includes('connection reset') ||
+    message.includes('timeout') ||
+    message.includes('econnreset') ||
+    message.includes('etimedout')
+  );
+};
+
+const runMigrationsWithRetry = async (maxAttempts = 3) => {
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      await runMigrations();
+      return;
+    } catch (err) {
+      const shouldRetry = attempt < maxAttempts && isTransientDbError(err);
+      if (!shouldRetry) {
+        throw err;
+      }
+
+      const delayMs = attempt * 3000;
+      logger.warn(
+        `Database migration attempt ${attempt}/${maxAttempts} failed (${err.message}). Retrying in ${delayMs}ms...`
+      );
+      await sleep(delayMs);
+    }
+  }
+};
 
 // Ensure logs directory exists
 const logsDir = path.join(__dirname, '../logs');
@@ -107,7 +141,7 @@ app.use((err, req, res, next) => {
 // ─── Start Server ─────────────────────────────────────────────────────────────
 const startServer = async () => {
   try {
-    await runMigrations();
+    await runMigrationsWithRetry(3);
 
     app.listen(PORT, '0.0.0.0', () => {
       logger.info(`Mini AI-HRMS API running on port ${PORT}`);
