@@ -13,7 +13,7 @@ services:
       - key: PORT
         value: 3001
       - key: DB_SSL
-        value: "true"
+        value: "false"
       - key: JWT_EXPIRES_IN
         value: 24h
       - key: DATABASE_URL
