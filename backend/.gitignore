@@ -1,0 +1,56 @@
+# ─── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Environment Variables ────────────────────────────────────────────────────
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+combined.log
+error.log
+exceptions.log
+
+# ─── Build Output ─────────────────────────────────────────────────────────────
+dist/
+build/
+
+# ─── Testing ──────────────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Database ─────────────────────────────────────────────────────────────────
+*.sqlite
+*.sqlite3
+*.db
+
+# ─── Docker ───────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Blockchain / Web3 ────────────────────────────────────────────────────────
+# CRITICAL: Never commit private keys!
+*.key
+*.pem
+.secret
+ADMIN_PRIVATE_KEY*
+contracts/artifacts/
+contracts/cache/
+
+# ─── Temporary Files ──────────────────────────────────────────────────────────
+tmp/
+temp/
+*.tmp
+*.bak
+
+# ─── OS Files ─────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
